@@ -1,23 +1,78 @@
-# Accessible Indonesia – Electron App
+# Access Indonesia – Accessibility Questionnaire App
 
-This Electron app is designed to assist with auditing accessible accommodations in Indonesia. It features a form-based interface with grouped questions, image upload, and the ability to generate:
+This Electron app is designed to assist in collecting accessibility data from hotels in Indonesia. It allows users to answer a structured form, save responses, generate a PDF report, and embed a summary widget into a webpage.
 
-- A complete PDF report
-- An embeddable widget for websites
-- Persistent saved progress via answers.json
+---
+
+## ✨ Features
+
+- Electron-based cross-platform desktop app (macOS & Windows)
+- Dynamically rendered form based on `questions.js`
+- Supports:
+  - Text answers
+  - Yes/No, Yes/No/Partial, Option-type radio buttons
+  - Gradient input with validation (Height & Length)
+  - Image upload per question (with preview and delete)
+- Skip logic to hide/show relevant follow-ups
+- Local save/load of answers (via Electron `userData` path)
+- PDF export with:
+  - Grouped images at top
+  - Tabular report (3-column layout: Question, Answer, Details)
+  - Custom layout control: 6 images per row max, scaled to 250px
+- Embeddable widget generator with 3 position options or manual button trigger
+- Native error popups (e.g. for image size too large)
+
+---
+
+## 🗂 Folder Structure
+
+```
+.
+├── assets/
+├── dist/
+├── node_modules/
+├── renderer/
+│   ├── logic/
+│   │   ├── core.js
+│   │   ├── image.js
+│   │   ├── validation.js
+│   ├── questions.js
+│   ├── pdf.js
+│   ├── render.js
+│   ├── widget.js
+│   ├── widget.template.js
+├── styles/
+│   └── style.css
+├── Access-Bali-Hotels.png
+├── generate-icons.js
+├── index.html
+├── main.js
+├── preload.js
+├── package.json
+├── package-lock.json
+├── README.md
+```
+
+---
+
+## 💾 Data Persistence
+
+All user data is stored locally on the user's machine in Electron's `app.getPath('userData')` directory:
+
+- **macOS:** `~/Library/Application Support/access-bali-hotels/answers.json`
+- **Windows:** `C:\Users\USERNAME\AppData\Roaming\access-bali-hotels\answers.json`
+
+Uploaded images are stored in a `user_images` subdirectory within the same path.
 
 ---
 
 ## 🚀 Getting Started
 
-### Prerequisites
-
-- Node.js 18+
-- NPM
-
-### Install Dependencies
+### Clone & Install
 
 ```bash
+git clone https://github.com/yourusername/access-indonesia.git
+cd access-indonesia
 npm install
 ```
 
@@ -29,122 +84,44 @@ npm start
 
 ---
 
-## 📦 Packaging for Production
+## 🧪 Development Notes
 
-### macOS
+- Electron IPC bridges main <-> renderer
+- PDF is generated in memory using base64 image data
+- Gradient questions must include height/length when "yes" is selected
+- Image uploads are restricted to ~130KB for performance on lower-end machines
+- Widget and PDF respect grouped question layout and output labels
+- `sharp` image processing has been removed for cross-platform compatibility
+
+---
+
+## 📦 Building Installers
 
 ```bash
-npm run make
-```
+# macOS DMG
+npx electron-builder --mac
 
-This creates a `.dmg` installer in the `out/make/` directory.
-
-### Windows
-
-```bash
-npm run make
-```
-
-Creates a signed `.exe` installer for Windows users.
-
----
-
-## 📝 Features
-
-- Form questions grouped by section
-- Conditional logic (skip certain questions based on answers)
-- Image uploads (one per image-type question)
-- PDF export with grouped layout
-- Widget generator to embed answers in other sites
-
----
-
-## 🧩 Widget Embedding
-
-When generating a widget, users can choose:
-
-- Button position (bottom left, center, or right)
-- Or manually insert their own trigger button using:
-
-```html
-<button id="open-widget">Open Accessibility Info</button>
-```
-
-> Note: Uploaded images are embedded in the widget, so total file size increases with each image.
-To keep widget size reasonable, limit uploads to compressed images (130 KB or less).
-
----
-
-## 📄 PDF Export
-
-Exports a structured accessibility report:
-
-- Image gallery at the top (max 24 images)
-- 6 images per page (2 per row × 3 rows)
-- Questions, answers, and details grouped below
-
-> Electron auto-compresses images during rendering.
-Final PDFs are compact and optimized for emailing.
-
----
-
-## 🖼 Image Upload Guidelines
-
-- You may upload **one image per image-type question**
-- Image size must be **under 130 KB**
-- Larger images are rejected with a native popup
-- Images are previewed with a remove option
-
----
-
-## 🧹 Image Storage and Cleanup
-
-Images are stored in the app’s private data folder.
-
-When an image is removed or replaced:
-- The old image file is deleted
-- The answers.json file is updated
-- Disk usage is kept minimal
-
----
-
-## 🛡 Security Notes
-
-- Images and answers are stored locally (not uploaded to cloud)
-- The app uses Electron IPC securely
-- No remote APIs or network access is required
-
----
-
-## 📁 File Structure
-
-```plaintext
-.
-├── main.js                # Electron main process
-├── preload.js             # Secure bridge between renderer and main
-├── render.js              # Form logic and UI rendering
-├── logic/
-│   ├── core.js            # Form rendering helpers and state updates
-│   ├── image.js           # Image upload, preview, and removal
-│   ├── validation.js      # Gradient and input validators
-│   └── pdf.js             # PDF generation
-├── data/
-│   ├── questions.js       # Question definitions
-│   └── answers.json       # User responses
-├── widget.js              # Widget generator and output
-├── widget.template.js     # Widget HTML layout
-├── index.html             # Renderer HTML entry point
-└── style.css              # App styling
+# Windows EXE
+npx electron-builder --win
 ```
 
 ---
 
-## 📬 Contact / Support
+## 🛡 Security
 
-This app is currently under pilot testing in select Indonesian hotels.  
-For questions or deployment help, contact the developer.
+- No remote URLs or web access
+- All user data remains local to device
+- Electron context isolation and preload API used
+- Uses Electron’s recommended `contextBridge` API for secure data sharing
 
 ---
 
-MIT License  
-Dylan Prior, 2025
+## 📸 Screenshot
+
+![Screenshot](Access-Bali-Hotels.png)
+
+---
+
+## 📄 License
+
+MIT
