@@ -1,0 +1,55 @@
+{
+  "name": "access-bali-hotels",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "build": "electron-builder --mac --win"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "icon-gen": "^5.0.0",
+    "jspdf": "^3.0.1"
+  },
+  "devDependencies": {
+    "electron": "^33.2.1",
+    "electron-builder": "^26.0.12",
+    "electron-packager": "^17.1.2"
+  },
+  "build": {
+    "appId": "com.accessbali.hotels",
+    "productName": "Access Bali Hotels",
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer/**/*",
+      "pdf.js",
+      "questions.js",
+      "index.html",
+      "styles/style.css",
+      "data/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "data/",
+        "to": "data"
+      }
+    ],
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/app.icns"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "assets/app.ico"
+    },
+    "directories": {
+      "output": "dist"
+    }
+  }
+}

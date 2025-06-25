@@ -1,0 +1,27 @@
+# Dependency folders
+node_modules/
+out/
+dist/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Electron build output
+*.dmg
+*.exe
+*.zip
+*.asar
+
+# App storage
+*.lock
+user_images/
+answers.json
+
+# VSCode
+.vscode/
