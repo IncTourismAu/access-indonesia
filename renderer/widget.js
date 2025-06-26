@@ -25,7 +25,21 @@ function groupQuestions(questions) {
     const heading = q.group || "General";
     const group = grouped.get(heading) || { questions: [] };
 
-    let gradientText = "";
+    let answer = "";
+    let detail = q.responseDetail || "";
+
+    // Capitalize Y/N responses
+    if (["y/n", "y/n/p", "y/n/t"].includes(q.type)) {
+      answer = q.response ? q.response.charAt(0).toUpperCase() + q.response.slice(1) : "";
+    }
+
+    // Move measure/number/option responses to detail only
+    if (["measure", "number", "option"].includes(q.type)) {
+      detail = q.response || "";
+      answer = "";
+    }
+
+    // Gradient calculation
     if (
       q.type === "gradient" &&
       q.response === "yes" &&
@@ -37,15 +51,15 @@ function groupQuestions(questions) {
       const h = parseFloat(q.height);
       const l = parseFloat(q.length);
       if (h > 0 && l > 0) {
-        const ratio = (l / h).toFixed(1);
-        gradientText = `1 : ${ratio}`;
+        const ratio = Math.round(l / h);
+        detail = `1 : ${ratio}`;
       }
     }
 
     group.questions.push({
       question: q.outputLabel || q.question,
-      response: q.response || "",
-      detail: gradientText || q.responseDetail || ""
+      response: answer,
+      detail: detail
     });
 
     grouped.set(heading, group);
@@ -56,6 +70,7 @@ function groupQuestions(questions) {
     questions
   }));
 }
+
 
 function collectGalleryImages(questions) {
   const gallery = [];

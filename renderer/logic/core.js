@@ -24,7 +24,7 @@ export async function loadQuestions() {
       return match ? { ...q, ...match } : q;
     });
 
-  renderQuestions();
+    safeRenderQuestions();
 }
 
 /**
@@ -89,7 +89,7 @@ export function renderQuestions() {
     toggle.addEventListener("click", () => {
       if (shownDuplicates.has(groupName)) shownDuplicates.delete(groupName);
       else shownDuplicates.add(groupName);
-      renderQuestions();
+      safeRenderQuestions();
     });
 
     lastElem.appendChild(toggle);
@@ -110,7 +110,7 @@ export function handleInputChange(event) {
 
   if (isRadio) {
     q.response = event.target.value;
-    renderQuestions(); // Needed for skip logic
+    safeRenderQuestions(); // Needed for skip logic
     return;
   }
 
@@ -325,6 +325,23 @@ function renderImageInput(q, wrapper) {
       input.dataset.imgIndex = 0;
       input.addEventListener("change", window.handleImageUpload);
       wrapper.appendChild(input);
+    }
+  }
+  function safeRenderQuestions() {
+    const active = document.activeElement;
+    const activeId = active?.dataset?.id;
+    const activeType = active?.type;
+    const activeValue = active?.value;
+  
+    renderQuestions(); // ⚠ triggers full redraw
+  
+    if (activeId) {
+      let selector = `[data-id="${activeId}"]`;
+      if (activeType === "radio" && activeValue) {
+        selector += `[value="${activeValue}"]`;
+      }
+      const toFocus = document.querySelector(selector);
+      if (toFocus) toFocus.focus();
     }
   }
   

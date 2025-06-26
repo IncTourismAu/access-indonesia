@@ -48,12 +48,20 @@ function buildAnswerTable(questions) {
     }
 
     const label = (q.outputLabel || q.question).replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    const answer = q.response || "";
-
+    let answer = "";
     let detail = q.responseDetail || "";
+
+    if (["y/n", "y/n/p", "y/n/t"].includes(q.type)) {
+      answer = q.response ? q.response.charAt(0).toUpperCase() + q.response.slice(1) : "";
+    } else if (["measure", "number", "option"].includes(q.type)) {
+      detail = q.response || "";
+    } else {
+      answer = q.response || "";
+    }
+
     if (q.type === "gradient") {
       if (q.height && q.length && !isNaN(parseFloat(q.height)) && !isNaN(parseFloat(q.length))) {
-        const ratio = (parseFloat(q.length) / parseFloat(q.height)).toFixed(1);
+        const ratio = Math.round(parseFloat(q.length) / parseFloat(q.height));
         detail = `1 : ${ratio}`;
       }
     }
@@ -79,6 +87,7 @@ function buildAnswerTable(questions) {
     </table>
   `;
 }
+
 
 function buildPaginatedImageGallery(images) {
   let galleryHtml = "";
