@@ -76,11 +76,16 @@ export function renderQuestions() {
       q => q.group === groupName && q.instance === 1 && !skippedIds.has(q.id)
     );
     if (groupQs.length === 0) return;
-
+  
+    const controllingQ = groupQs.find(q =>
+      ["y/n", "y/n/p", "y/n/t"].includes(q.type)
+    );
+    if (controllingQ?.response === "no") return;
+  
     const lastId = groupQs[groupQs.length - 1].id;
     const lastElem = document.querySelector(`[data-id="${lastId}"]`);
     if (!lastElem) return;
-
+  
     const toggle = document.createElement("button");
     toggle.className = "duplicate-button";
     toggle.textContent = shownDuplicates.has(groupName)
@@ -91,7 +96,7 @@ export function renderQuestions() {
       else shownDuplicates.add(groupName);
       safeRenderQuestions();
     });
-
+  
     lastElem.appendChild(toggle);
   });
 

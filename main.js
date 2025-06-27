@@ -141,7 +141,7 @@ ipcMain.handle("save-answers", async (_, answers) => {
 });
 
 // Save an uploaded image buffer to disk
-// Save an uploaded image buffer to disk without resizing (no sharp)
+
 ipcMain.handle("save-image", async (event, { buffer, id }) => {
   const outputDir = path.join(app.getPath("userData"), "user_images");
   const outputPath = path.join(outputDir, `${id}.jpg`);
@@ -155,7 +155,7 @@ ipcMain.handle("save-image", async (event, { buffer, id }) => {
 });
 
 // Remove an image file and update the answers JSON to reflect that
-// Remove an image file and update the answers JSON to reflect that
+
 ipcMain.handle("remove-image", async (_, { id, index }) => {
   try {
     const answers = JSON.parse(fs.readFileSync(answersPath, "utf-8"));

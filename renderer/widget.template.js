@@ -77,14 +77,11 @@ if (imageGallery.length > 0) {
 }
 
 // Form Responses
-const responseTitle = document.createElement("h2");
-responseTitle.textContent = "Form Responses";
-inner.appendChild(responseTitle);
 
 data.forEach(group => {
-  const groupHeading = document.createElement("h3");
-  groupHeading.textContent = group.heading;
-  inner.appendChild(groupHeading);
+  // const groupHeading = document.createElement("h3");
+  // groupHeading.textContent = group.heading;
+  // inner.appendChild(groupHeading);
 
   const table = document.createElement("table");
   table.style.cssText = `
@@ -107,6 +104,16 @@ data.forEach(group => {
   const tbody = document.createElement("tbody");
 
   group.questions.forEach(q => {
+    if (q.subheading) {
+      const row = document.createElement("tr");
+      const cell = document.createElement("td");
+      cell.colSpan = 3;
+      cell.innerHTML = `<strong>${q.label}</strong>`;
+      cell.style.cssText = "border:1px solid #ccc; padding:5px; background:#eef;";
+      row.appendChild(cell);
+      tbody.appendChild(row);
+      return;
+    }
     const row = document.createElement("tr");
 
     const tdLabel = document.createElement("td");

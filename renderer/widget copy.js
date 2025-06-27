@@ -16,8 +16,7 @@ function toBase64Image(filePath) {
 function groupQuestions(questions) {
   const grouped = new Map();
 
-  for (let i = 0; i < questions.length; i++) {
-    const q = questions[i];
+  for (const q of questions) {
     if (q.type === "image") continue;
 
     const hasResponse = q.response || q.responseDetail || q.height || q.length;
@@ -26,73 +25,59 @@ function groupQuestions(questions) {
     const heading = q.group || "General";
     const group = grouped.get(heading) || { questions: [] };
 
-    if (q.isHeading) {
-      // Look ahead: is there any content before next heading?
-      let hasDataBelow = false;
-      for (let j = i + 1; j < questions.length; j++) {
-        const nextQ = questions[j];
-        if (nextQ.isHeading || nextQ.group !== q.group) break;
-        if (nextQ.response || nextQ.responseDetail || nextQ.height || nextQ.length) {
-          hasDataBelow = true;
-          break;
-        }
-      }
-      if (!hasDataBelow) continue;
+    let answer = "";
+    let detail = q.responseDetail || "";
 
+    // Capitalize Y/N responses
+    if (["y/n", "y/n/p", "y/n/t"].includes(q.type)) {
+      answer = q.response ? q.response.charAt(0).toUpperCase() + q.response.slice(1) : "";
+    }
+
+    // Move measure/number/option responses to detail only
+    if (["measure", "number", "option"].includes(q.type)) {
+      detail = q.response || "";
+      answer = "";
+    }
+
+    // Gradient calculation
+    if (
+      q.type === "gradient" &&
+      q.response === "yes" &&
+      q.height &&
+      q.length &&
+      !isNaN(parseFloat(q.height)) &&
+      !isNaN(parseFloat(q.length))
+    ) {
+      const h = parseFloat(q.height);
+      const l = parseFloat(q.length);
+      if (h > 0 && l > 0) {
+        const ratio = Math.round(l / h);
+        detail = `1 : ${ratio}`;
+      }
+    }
+
+    if (q.isHeading) {
       group.questions.push({
         subheading: true,
         label: q.outputLabel || q.question
       });
     } else {
-      // Avoid duplicating group name as a question row
-      if ((q.outputLabel || q.question)?.trim().toLowerCase() === heading.trim().toLowerCase()) continue;
-
-
-      let answer = "";
-      let detail = q.responseDetail || "";
-
-      if (["y/n", "y/n/p", "y/n/t"].includes(q.type)) {
-        answer = q.response ? q.response.charAt(0).toUpperCase() + q.response.slice(1) : "";
-      }
-
-      if (["measure", "number", "option"].includes(q.type)) {
-        detail = q.response || "";
-        answer = "";
-      }
-
-      if (
-        q.type === "gradient" &&
-        q.response === "yes" &&
-        q.height &&
-        q.length &&
-        !isNaN(parseFloat(q.height)) &&
-        !isNaN(parseFloat(q.length))
-      ) {
-        const h = parseFloat(q.height);
-        const l = parseFloat(q.length);
-        if (h > 0 && l > 0) {
-          const ratio = Math.round(l / h);
-          detail = `1 : ${ratio}`;
-        }
-      }
-
       group.questions.push({
-        question: q.outputLabel || q.question,
-        response: answer,
-        detail: detail
-      });
-    }
+      question: q.outputLabel || q.question,
+      response: answer,
+      detail: detail
+    });
 
+        }
     grouped.set(heading, group);
   }
 
-  return Array.from(grouped.entries())
-    .filter(([, { questions }]) => questions.some(q => !q.subheading || (q.subheading && q.label)))
-    .map(([heading, { questions }]) => ({
-      heading,
-      questions
-    }));
+  return Array.from(grouped.entries()).map(([heading, { questions }]) => ({
+    heading,
+    questions
+  }));
 }
+
 
 function collectGalleryImages(questions) {
   const gallery = [];

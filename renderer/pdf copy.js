@@ -50,10 +50,8 @@ function buildAnswerTable(questions) {
     (q.response || q.responseDetail || q.height || q.length || q.isHeading)
   );
 
-  for (let i = 0; i < filtered.length; i++) {
-    const q = filtered[i];
+  for (const q of filtered) {
     if (q.isHeading) {
-      if (!hasContentAfter(i, filtered)) continue;
       const heading = (q.outputLabel || q.question || q.group || "Section").replace(/</g, "&lt;").replace(/>/g, "&gt;");
       rows.push(`<tr><th colspan="3" style="background:#eef; text-align:left;font-weight: bold;">${heading}</th></tr>`);
       continue; // skip normal row rendering

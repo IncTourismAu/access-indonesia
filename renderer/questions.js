@@ -6,9 +6,9 @@ const questionsPath = path.join(__dirname, "questions.json");
 const answersPath = path.join(app.getPath("userData"), "answers.json");
 
 function getQuestions() {
-  console.log("📂 questionsPath:", questionsPath);
-console.log("📂 answersPath:", answersPath);
-console.log("📦 answers file exists?", fs.existsSync(answersPath));
+//   console.log("📂 questionsPath:", questionsPath);
+// console.log("📂 answersPath:", answersPath);
+// console.log("📦 answers file exists?", fs.existsSync(answersPath));
   let questions = [];
   let answers = [];
 

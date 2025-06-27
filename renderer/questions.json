@@ -277,7 +277,7 @@
   {
     "id": "q10",
     "question": "Is there a drop-off point close to the entrance?",
-    "type": "measure",
+    "type": "y/n/t",
     "outputLabel": "Drop-off point",
     "conditional": "",
     "addImage": false,
@@ -514,7 +514,7 @@
   {
     "id": "q21",
     "question": "   - Are there stairs, how many?",
-    "type": "measure",
+    "type": "y/n/t",
     "outputLabel": "Stairs at Reception",
     "conditional": "",
     "addImage": false,
@@ -568,7 +568,7 @@
   {
     "id": "q24",
     "question": "   - What is the width of the ramp at the narrowest point?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Ramp width at narrow point",
     "conditional": "",
     "addImage": false,
@@ -867,7 +867,7 @@
   {
     "id": "q40",
     "question": " - What is the door width?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Door Width",
     "conditional": "",
     "addImage": false,
@@ -885,7 +885,7 @@
   {
     "id": "q41",
     "question": " - What is the circulation space?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Circulation space",
     "conditional": "",
     "addImage": false,
@@ -1006,7 +1006,7 @@
   {
     "id": "q47",
     "question": "   - What is the width of the ramp at the narrowest point?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Narrow point of ramp",
     "conditional": "",
     "addImage": false,
@@ -1042,7 +1042,7 @@
   {
     "id": "q49",
     "question": "How wide is the doorway?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Door Width",
     "conditional": "",
     "addImage": false,
@@ -1060,12 +1060,12 @@
   {
     "id": "q50",
     "question": "What is the circulation space outside of the doorway?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Outside door circulation space",
     "conditional": "",
     "addImage": false,
     "images": null,
-    "prompt": "Measurement",
+    "prompt": "measure",
     "isHeading": false,
     "skipLogic": null,
     "group": "Wheelchair Accessible Room",
@@ -1078,7 +1078,7 @@
   {
     "id": "q51",
     "question": "Is the door easy to open? Handle style",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Door and handle style",
     "conditional": "",
     "addImage": false,
@@ -1150,7 +1150,7 @@
   {
     "id": "q55",
     "question": "How wide is the doorway?",
-    "type": "measurement",
+    "type": "measure",
     "outputLabel": "Bathroom door width",
     "conditional": "",
     "addImage": false,
@@ -1168,7 +1168,7 @@
   {
     "id": "q56",
     "question": "Is there a toilet with grab rails? ",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Toilet with grabrails",
     "conditional": "",
     "addImage": false,
@@ -1186,7 +1186,7 @@
   {
     "id": "q57",
     "question": "What is the toilet height?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Toilet Height",
     "conditional": "",
     "addImage": false,
@@ -1204,7 +1204,7 @@
   {
     "id": "q58",
     "question": "Is there clearance on one side of the toilet?",
-    "type": "measurement",
+    "type": "measure",
     "outputLabel": "Side clearance to toilet",
     "conditional": "",
     "addImage": false,
@@ -1222,7 +1222,7 @@
   {
     "id": "q59",
     "question": "What is the clearance under the handbasin?",
-    "type": "measurement",
+    "type": "measure",
     "outputLabel": "Basin clearance underneath",
     "conditional": "",
     "addImage": false,
@@ -1240,7 +1240,7 @@
   {
     "id": "q60",
     "question": "Is there a mirror over the handbasin?",
-    "type": "measurement",
+    "type": "measure",
     "outputLabel": "Mirror over basin height",
     "conditional": "",
     "addImage": false,
@@ -1258,7 +1258,7 @@
   {
     "id": "q61",
     "question": "Is there a roll-in shower with grab rails? ",
-    "type": "measurement",
+    "type": "measure",
     "outputLabel": "Roll in shower size",
     "conditional": "",
     "addImage": false,
@@ -1330,7 +1330,7 @@
   {
     "id": "q65",
     "question": "What height is the bed?",
-    "type": "measurement",
+    "type": "measure",
     "outputLabel": "Bed height",
     "conditional": "",
     "addImage": false,
@@ -1348,7 +1348,7 @@
   {
     "id": "q66",
     "question": "What is the clearance under the bed?",
-    "type": "measurement",
+    "type": "measure",
     "outputLabel": "Clearance under bed",
     "conditional": "",
     "addImage": false,
@@ -1366,7 +1366,7 @@
   {
     "id": "q67",
     "question": "Is there clearance around the bed?",
-    "type": "measurement",
+    "type": "measure",
     "outputLabel": "Clearance around bed",
     "conditional": "",
     "addImage": false,
@@ -1402,7 +1402,7 @@
   {
     "id": "q69",
     "question": "What height are the switches/controls?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Switches and controls height",
     "conditional": "",
     "addImage": false,
@@ -1420,7 +1420,7 @@
   {
     "id": "q70",
     "question": "Are light switches within reach of the bed?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Light controls reach from bed",
     "conditional": "",
     "addImage": false,
@@ -1438,7 +1438,7 @@
   {
     "id": "q71",
     "question": "Is the furniture easy to move?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Furniture moveable",
     "conditional": "",
     "addImage": false,
@@ -1456,7 +1456,7 @@
   {
     "id": "q72",
     "question": "Is clothes storage at a good height?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Clothes storage access",
     "conditional": "",
     "addImage": false,
@@ -1474,7 +1474,7 @@
   {
     "id": "q73",
     "question": "Are curtains or blinds easy to reach to open and close?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Curtains / Blinds operation",
     "conditional": "",
     "addImage": false,
@@ -1535,7 +1535,7 @@
   {
     "id": "q76",
     "question": " - How high is the bench top?",
-    "type": "measurement",
+    "type": "measure",
     "outputLabel": "Bench height",
     "conditional": "",
     "addImage": false,
@@ -1553,7 +1553,7 @@
   {
     "id": "q77",
     "question": " - Are the appliances above or below the bench?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Appliances location",
     "conditional": "",
     "addImage": false,
@@ -1571,7 +1571,7 @@
   {
     "id": "q78",
     "question": " - Are utensils above or below the bench?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Crockery and utensils location",
     "conditional": "",
     "addImage": false,
@@ -1649,7 +1649,7 @@
   {
     "id": "q82",
     "question": " - How wide is the doorway?",
-    "type": "measurement",
+    "type": "measure",
     "outputLabel": "Door Width",
     "conditional": "",
     "addImage": false,
@@ -1764,7 +1764,7 @@
   {
     "id": "q88",
     "question": "   - What is the width of the ramp at the narrowest point?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Narrow point of ramp",
     "conditional": "",
     "addImage": false,
@@ -1800,7 +1800,7 @@
   {
     "id": "q90",
     "question": "How wide is the doorway?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Door Width",
     "conditional": "",
     "addImage": false,
@@ -1818,12 +1818,12 @@
   {
     "id": "q91",
     "question": "What is the circulation space outside of the doorway?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Outside door circulation space",
     "conditional": "",
     "addImage": false,
     "images": null,
-    "prompt": "Measurement",
+    "prompt": "measure",
     "isHeading": false,
     "skipLogic": null,
     "group": "Wheelchair Accessible Room",
@@ -1836,7 +1836,7 @@
   {
     "id": "q92",
     "question": "Is the door easy to open? Handle style",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Door and handle style",
     "conditional": "",
     "addImage": false,
@@ -1908,7 +1908,7 @@
   {
     "id": "q96",
     "question": "How wide is the doorway?",
-    "type": "measurement",
+    "type": "measure",
     "outputLabel": "Bathroom door width",
     "conditional": "",
     "addImage": false,
@@ -1926,7 +1926,7 @@
   {
     "id": "q97",
     "question": "Is there a toilet with grab rails? ",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Toilet with grabrails",
     "conditional": "",
     "addImage": false,
@@ -1944,7 +1944,7 @@
   {
     "id": "q98",
     "question": "What is the toilet height?",
-    "type": "measurement",
+    "type": "measure",
     "outputLabel": "Toilet Height",
     "conditional": "",
     "addImage": false,
@@ -1962,7 +1962,7 @@
   {
     "id": "q99",
     "question": "Is there clearance on one side of the toilet?",
-    "type": "measurement",
+    "type": "measure",
     "outputLabel": "Side clearance to toilet",
     "conditional": "",
     "addImage": false,
@@ -1980,7 +1980,7 @@
   {
     "id": "q100",
     "question": "What is the clearance under the handbasin?",
-    "type": "measurement",
+    "type": "measure",
     "outputLabel": "Basin clearance underneath",
     "conditional": "",
     "addImage": false,
@@ -1998,7 +1998,7 @@
   {
     "id": "q101",
     "question": "Is there a mirror over the handbasin?",
-    "type": "measurement",
+    "type": "measure",
     "outputLabel": "Mirror over basin height",
     "conditional": "",
     "addImage": false,
@@ -2016,7 +2016,7 @@
   {
     "id": "q102",
     "question": "Is there a roll-in shower with grab rails? ",
-    "type": "measurement",
+    "type": "measure",
     "outputLabel": "Roll in shower size",
     "conditional": "",
     "addImage": false,
@@ -2088,7 +2088,7 @@
   {
     "id": "q106",
     "question": "What height is the bed?",
-    "type": "measurement",
+    "type": "measure",
     "outputLabel": "Bed height",
     "conditional": "",
     "addImage": false,
@@ -2106,7 +2106,7 @@
   {
     "id": "q107",
     "question": "What is the clearance under the bed?",
-    "type": "measurement",
+    "type": "measure",
     "outputLabel": "Clearance under bed",
     "conditional": "",
     "addImage": false,
@@ -2124,7 +2124,7 @@
   {
     "id": "q108",
     "question": "Is there clearance around the bed?",
-    "type": "measurement",
+    "type": "measure",
     "outputLabel": "Clearance around bed",
     "conditional": "",
     "addImage": false,
@@ -2160,7 +2160,7 @@
   {
     "id": "q110",
     "question": "What height are the switches/controls?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Switches and controls height",
     "conditional": "",
     "addImage": false,
@@ -2178,7 +2178,7 @@
   {
     "id": "q111",
     "question": "Are light switches within reach of the bed?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Light controls reach from bed",
     "conditional": "",
     "addImage": false,
@@ -2196,7 +2196,7 @@
   {
     "id": "q112",
     "question": "Is the furniture easy to move?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Furniture moveable",
     "conditional": "",
     "addImage": false,
@@ -2214,7 +2214,7 @@
   {
     "id": "q113",
     "question": "Is clothes storage at a good height?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Clothes storage access",
     "conditional": "",
     "addImage": false,
@@ -2232,7 +2232,7 @@
   {
     "id": "q114",
     "question": "Are curtains or blinds easy to reach to open and close?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Curtains / Blinds operation",
     "conditional": "",
     "addImage": false,
@@ -2293,7 +2293,7 @@
   {
     "id": "q117",
     "question": " - How high is the bench top?",
-    "type": "measurement",
+    "type": "measure",
     "outputLabel": "Bench height",
     "conditional": "",
     "addImage": false,
@@ -2311,7 +2311,7 @@
   {
     "id": "q118",
     "question": " - Are the appliances above or below the bench?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Appliances location",
     "conditional": "",
     "addImage": false,
@@ -2329,7 +2329,7 @@
   {
     "id": "q119",
     "question": " - Are utensils above or below the bench?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Crockery and utensils location",
     "conditional": "",
     "addImage": false,
@@ -2407,7 +2407,7 @@
   {
     "id": "q123",
     "question": " - How wide is the doorway?",
-    "type": "measurement",
+    "type": "measure",
     "outputLabel": "Door Width",
     "conditional": "",
     "addImage": false,
@@ -2563,7 +2563,7 @@
   {
     "id": "q131",
     "question": "   - What is the width of the ramp at the narrowest point?",
-    "type": "measurement",
+    "type": "measure",
     "outputLabel": "Narrow point of ramp",
     "conditional": "",
     "addImage": false,
@@ -2915,7 +2915,7 @@
   {
     "id": "q149",
     "question": " - What is the width of the ramp at the narrowest point?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Narrow point of ramp",
     "conditional": "",
     "addImage": false,
@@ -2969,7 +2969,7 @@
   {
     "id": "q152",
     "question": " Is there good seating at eateries?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Seating options",
     "conditional": "",
     "addImage": false,
@@ -2987,7 +2987,7 @@
   {
     "id": "q153",
     "question": "Are there low height service counters?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Service counters",
     "conditional": "",
     "addImage": false,
@@ -3178,7 +3178,7 @@
   {
     "id": "q162",
     "question": "Pool Name",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Pool Name",
     "conditional": "",
     "addImage": false,
@@ -3423,7 +3423,7 @@
   {
     "id": "q175",
     "question": "Pool Name",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Pool Name",
     "conditional": "",
     "addImage": false,
@@ -3519,7 +3519,7 @@
   {
     "id": "q180",
     "question": " Are there Steps into the pool - how many?",
-    "type": "m",
+    "type": "measure",
     "outputLabel": "Stairs",
     "conditional": "",
     "addImage": false,
