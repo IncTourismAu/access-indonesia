@@ -57,6 +57,7 @@ if (imageGallery.length > 0) {
 
   imageGallery.forEach(({ src, label }) => {
     const wrapper = document.createElement("div");
+    wrapper.className = "gallery-item";
     wrapper.style.cssText = "width: 48%; text-align: center;";
 
     const img = document.createElement("img");
@@ -94,9 +95,9 @@ data.forEach(group => {
   const thead = document.createElement("thead");
   thead.innerHTML = `
     <tr style="background:#f0f0f0;">
-      <th style="width: 40%; text-align:left; border:1px solid #ccc; padding:5px;">Question</th>
-      <th style="width: 30%; text-align:left; border:1px solid #ccc; padding:5px;">Answer</th>
-      <th style="width: 30%; text-align:left; border:1px solid #ccc; padding:5px;">Detail</th>
+      <th style="width: 30%; text-align:left; border:1px solid #ccc; padding:5px;">Question</th>
+      <th style="width: 20%; text-align:left; border:1px solid #ccc; padding:5px;">Answer</th>
+      <th style="width: 50%; text-align:left; border:1px solid #ccc; padding:5px;">Detail</th>
     </tr>
   `;
   table.appendChild(thead);
@@ -140,6 +141,20 @@ data.forEach(group => {
 });
 
 overlay.appendChild(inner);
+const style = document.createElement("style");
+style.textContent = `
+  @media (max-width: 600px) {
+    #widget-overlay .gallery-item {
+      width: 100% !important;
+    }
+    #widget-overlay .gallery-item img {
+      max-width: 100% !important;
+      height: auto !important;
+    }
+  }
+`;
+document.head.appendChild(style);
+
 document.body.appendChild(overlay);
 
 // Optional button injection
