@@ -167,6 +167,41 @@ This project is divided between Electron’s main and renderer processes, with l
 
 
 
+
+---
+
+## 🚨 Running the App on macOS and Windows (Unsigned Build)
+
+This application is self-signed (or unsigned), so both macOS and Windows may display a warning when you first try to open it. This is expected behavior for desktop apps not distributed via the App Store or Microsoft Store.
+
+### 🖥 macOS
+
+macOS Gatekeeper may block the app with a message like:
+
+> “Access Bali Hotels can’t be opened because Apple cannot check it for malicious software.”
+
+#### ✅ To allow it:
+1. Attempt to open the app by double-clicking it — then click **Cancel** when the warning appears.
+2. Open **System Settings** → **Privacy & Security**.
+3. Scroll down to the **Security** section.
+4. You’ll see a message about the blocked app — click **Open Anyway**.
+5. Confirm again by clicking **Open** in the dialog.
+
+### 🪟 Windows
+
+Windows Defender SmartScreen may show:
+
+> “Windows protected your PC. Microsoft Defender SmartScreen prevented an unrecognized app from starting.”
+
+#### ✅ To allow it:
+1. Click **More info** in the warning popup.
+2. Then click **Run anyway**.
+
+---
+
+Both platforms will remember your choice and allow the app to open normally in the future.
+
+
 ## 📄 License
 
 MIT
