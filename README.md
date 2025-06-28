@@ -1,6 +1,13 @@
 # Access Indonesia – Accessibility Questionnaire App
 
-This Electron app is designed to assist in collecting accessibility data from hotels in Indonesia. It allows users to answer a structured form, save responses, generate a PDF report, and embed a summary widget into a webpage.
+This Electron app is designed to assist in collecting accessibility data from hotels in Indonesia. It allows users to answer a structured form, save responses, generate a PDF report, and build a JavaScript widget that can be embedded in a webpage by your developer.
+
+---
+
+## 📥 Downloads
+
+- [Download for macOS (.dmg)](https://github.com/IncTourismAu/access-indonesia/releases/download/v1.0.0/Access.Bali.Hotels-1.0.0.dmg)
+- [Download for Windows (.exe)](https://github.com/IncTourismAu/access-indonesia/releases/download/v1.0.0/Access.Bali.Hotels.Setup.1.0.0.exe)
 
 ---
 
@@ -91,19 +98,23 @@ npm start
 - Gradient questions must include height/length when "yes" is selected
 - Image uploads are restricted to ~130KB for performance on lower-end machines
 - Widget and PDF respect grouped question layout and output labels
-- `sharp` image processing has been removed for cross-platform compatibility
+- The app builds a JavaScript widget that can be embedded in a webpage by your developer
 
 ---
 
 ## 📦 Building Installers
 
+To build platform-specific installers:
+
 ```bash
 # macOS DMG
-npx electron-builder --mac
+npm run build:mac
 
 # Windows EXE
-npx electron-builder --win
+npm run build:win
 ```
+
+These scripts will generate `.dmg` and `.exe` installers using electron-builder in the `/dist` directory.
 
 ---
 
