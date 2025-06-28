@@ -1,4 +1,4 @@
-// Create overlay container
+// 🧱 Create the full-screen overlay that displays the widget content
 const overlay = document.createElement("div");
 overlay.id = "widget-overlay";
 overlay.style.cssText = `
@@ -13,6 +13,7 @@ overlay.style.cssText = `
   overflow-y: auto;
 `;
 
+// 📦 Inner content container (holds gallery + form data)
 const inner = document.createElement("div");
 inner.style.cssText = `
   background: white;
@@ -25,6 +26,7 @@ inner.style.cssText = `
   color: #000;
 `;
 
+// ❌ Close button
 const closeButton = document.createElement("button");
 closeButton.textContent = "Close";
 closeButton.style.cssText = `
@@ -38,10 +40,9 @@ closeButton.style.cssText = `
 closeButton.addEventListener("click", () => {
   overlay.style.display = "none";
 });
-
 inner.appendChild(closeButton);
 
-// Image Gallery
+// 🖼️ Render image gallery (if any)
 if (imageGallery.length > 0) {
   const galleryTitle = document.createElement("h2");
   galleryTitle.textContent = "Image Gallery";
@@ -64,7 +65,6 @@ if (imageGallery.length > 0) {
     img.src = src;
     img.style.cssText = "max-width: 300px; max-height: 300px; border: 1px solid #ccc;";
 
-
     const caption = document.createElement("div");
     caption.textContent = label;
     caption.style.cssText = "font-size: 0.9em; margin-top: 4px;";
@@ -77,12 +77,9 @@ if (imageGallery.length > 0) {
   inner.appendChild(galleryWrapper);
 }
 
-// Form Responses
-
+// 📋 Render grouped question/answer/detail table for each section
 data.forEach(group => {
-  // const groupHeading = document.createElement("h3");
-  // groupHeading.textContent = group.heading;
-  // inner.appendChild(groupHeading);
+  // Headings were removed intentionally to avoid duplicate label rows
 
   const table = document.createElement("table");
   table.style.cssText = `
@@ -106,6 +103,7 @@ data.forEach(group => {
 
   group.questions.forEach(q => {
     if (q.subheading) {
+      // Render subheading row (e.g. Bathroom, Kitchen, etc.)
       const row = document.createElement("tr");
       const cell = document.createElement("td");
       cell.colSpan = 3;
@@ -115,6 +113,8 @@ data.forEach(group => {
       tbody.appendChild(row);
       return;
     }
+
+    // Render standard Q&A row
     const row = document.createElement("tr");
 
     const tdLabel = document.createElement("td");
@@ -141,6 +141,8 @@ data.forEach(group => {
 });
 
 overlay.appendChild(inner);
+
+// 📱 Add responsive CSS for mobile (gallery stack layout)
 const style = document.createElement("style");
 style.textContent = `
   @media (max-width: 600px) {
@@ -155,9 +157,10 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
+// 🧩 Add the full widget to the page
 document.body.appendChild(overlay);
 
-// Optional button injection
+// 🔘 Automatically add widget button unless "manual" mode
 if (buttonPosition !== "manual") {
   const btn = document.createElement("button");
   btn.id = "open-widget";
@@ -181,6 +184,8 @@ if (buttonPosition !== "manual") {
   });
   document.body.appendChild(btn);
 }
+
+// 🧷 Manual button hook — attach to element with ID 'open-widget' if present
 if (buttonPosition === "manual") {
   const btn = document.getElementById("open-widget");
   if (btn) {

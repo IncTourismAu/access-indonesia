@@ -2,16 +2,17 @@
  * core.js
  * -------
  * Main logic module for question rendering and input handling.
- * Preserves skip logic, blur events, gradient validation.
+ * Preserves skip logic, blur events, gradient validation, and image management.
  */
 
-let skippedIds = new Set();
-let shownDuplicates = new Set();
+let skippedIds = new Set(); // Used to hide questions via skip logic
+let shownDuplicates = new Set(); // Tracks whether duplicate room groups are shown
 
 const questionsContainer = document.getElementById("questions-container");
 
 /**
- * Loads and merges questions with saved answers.
+ * Loads questions and merges any saved answers from disk
+ * Filters out hardcoded hidden questions
  */
 export async function loadQuestions() {
   const [questions, answers] = await window.electronAPI.getQuestionsWithAnswers();
@@ -24,11 +25,12 @@ export async function loadQuestions() {
       return match ? { ...q, ...match } : q;
     });
 
-    safeRenderQuestions();
+  safeRenderQuestions();
 }
 
 /**
- * Renders all visible questions with their inputs.
+ * Renders all visible questions with UI elements
+ * Applies skip logic and conditional rendering for repeatable sections
  */
 export function renderQuestions() {
   questionsContainer.innerHTML = "";
@@ -66,26 +68,28 @@ export function renderQuestions() {
 
     questionsContainer.appendChild(block);
 
+    // Track first instance for toggles later
     if (q.duplicateGroup && q.instance === 1) {
       instance1Groups.set(q.group, block);
     }
   });
 
+  // Add toggle button for duplicate sections
   instance1Groups.forEach((_, groupName) => {
     const groupQs = window.allQuestions.filter(
       q => q.group === groupName && q.instance === 1 && !skippedIds.has(q.id)
     );
     if (groupQs.length === 0) return;
-  
+
     const controllingQ = groupQs.find(q =>
       ["y/n", "y/n/p", "y/n/t"].includes(q.type)
     );
     if (controllingQ?.response === "no") return;
-  
+
     const lastId = groupQs[groupQs.length - 1].id;
     const lastElem = document.querySelector(`[data-id="${lastId}"]`);
     if (!lastElem) return;
-  
+
     const toggle = document.createElement("button");
     toggle.className = "duplicate-button";
     toggle.textContent = shownDuplicates.has(groupName)
@@ -96,7 +100,7 @@ export function renderQuestions() {
       else shownDuplicates.add(groupName);
       safeRenderQuestions();
     });
-  
+
     lastElem.appendChild(toggle);
   });
 
@@ -104,7 +108,7 @@ export function renderQuestions() {
 }
 
 /**
- * Input handler for all fields. Re-renders only for radio buttons (skip logic).
+ * Called on every input change — updates in-memory data
  */
 export function handleInputChange(event) {
   const id = event.target.dataset.id;
@@ -112,10 +116,9 @@ export function handleInputChange(event) {
   if (!q) return;
 
   const isRadio = event.target.type === "radio";
-
   if (isRadio) {
     q.response = event.target.value;
-    safeRenderQuestions(); // Needed for skip logic
+    safeRenderQuestions();
     return;
   }
 
@@ -131,7 +134,8 @@ export function handleInputChange(event) {
 }
 
 /**
- * Validates gradient inputs and highlights errors.
+ * Checks that all "Yes" ramp gradients have height + length
+ * Adds red border if missing
  */
 export function validateGradientQuestions(questions) {
   let valid = true;
@@ -153,24 +157,27 @@ export function validateGradientQuestions(questions) {
   return valid;
 }
 
+/**
+ * Attaches listeners for blur + change to auto-save answers
+ */
 function addEventListeners() {
-    // Save on blur for text, gradient, and detail inputs
-    document.querySelectorAll(".response-input, .gradient-input, .detail-textarea").forEach(el => {
-      el.addEventListener("blur", () => {
-        window.electronAPI.saveAnswers(window.allQuestions);
-      });
+  document.querySelectorAll(".response-input, .gradient-input, .detail-textarea").forEach(el => {
+    el.addEventListener("blur", () => {
+      window.electronAPI.saveAnswers(window.allQuestions);
     });
-  
-    // ✅ NEW: Save on radio change
-    document.querySelectorAll(".radio-input").forEach(radio => {
-        radio.addEventListener("change", async event => {
-            await window.handleInputChange(event);         // Updates memory + triggers re-render
-            await window.electronAPI.saveAnswers(window.allQuestions); // Commits to disk
-          });
-    });
-  }
-  
+  });
 
+  document.querySelectorAll(".radio-input").forEach(radio => {
+    radio.addEventListener("change", async event => {
+      await window.handleInputChange(event);
+      await window.electronAPI.saveAnswers(window.allQuestions);
+    });
+  });
+}
+
+/**
+ * Creates a lookup of all question answers by ID
+ */
 function buildResponseLookup(questions) {
   const map = {};
   questions.forEach(q => {
@@ -179,6 +186,9 @@ function buildResponseLookup(questions) {
   return map;
 }
 
+/**
+ * Hides (skips) questions if skip logic matches response
+ */
 function applySkipLogic(questions, responses) {
   questions.forEach(q => {
     if (q.skipLogic?.value && q.skipLogic.skip) {
@@ -191,6 +201,9 @@ function applySkipLogic(questions, responses) {
   });
 }
 
+/**
+ * Chooses appropriate renderer based on question type
+ */
 function renderInputByType(q, wrapper) {
   if (["y/n", "y/n/t", "y/n/p", "option"].includes(q.type)) {
     renderRadioInputs(q, wrapper);
@@ -212,34 +225,39 @@ function renderInputByType(q, wrapper) {
   }
 }
 
+/**
+ * Renders Y/N/P/etc radio options
+ */
 function renderRadioInputs(q, wrapper) {
-    let options;
-  
-    if (q.type === "option") {
-      options = q.conditional?.split(",").map(opt => opt.trim()) || [];
-    } else {
-      options = ["yes", "no"];
-      if (q.type === "y/n/p") options.push("partial");
-    }
-  
-    options.forEach(opt => {
-      const radio = document.createElement("input");
-      radio.type = "radio";
-      radio.name = q.id;
-      radio.value = opt;
-      radio.checked = q.response === opt;
-      radio.className = "radio-input";
-      radio.dataset.id = q.id;
-      radio.addEventListener("change", window.handleInputChange);
-      wrapper.appendChild(radio);
-  
-      const label = document.createElement("span");
-      label.textContent = opt;
-      wrapper.appendChild(label);
-    });
-  }
-  
+  let options;
 
+  if (q.type === "option") {
+    options = q.conditional?.split(",").map(opt => opt.trim()) || [];
+  } else {
+    options = ["yes", "no"];
+    if (q.type === "y/n/p") options.push("partial");
+  }
+
+  options.forEach(opt => {
+    const radio = document.createElement("input");
+    radio.type = "radio";
+    radio.name = q.id;
+    radio.value = opt;
+    radio.checked = q.response === opt;
+    radio.className = "radio-input";
+    radio.dataset.id = q.id;
+    radio.addEventListener("change", window.handleInputChange);
+    wrapper.appendChild(radio);
+
+    const label = document.createElement("span");
+    label.textContent = opt;
+    wrapper.appendChild(label);
+  });
+}
+
+/**
+ * Renders gradient-specific radio + numeric fields
+ */
 function renderGradientInputs(q, wrapper) {
   ["yes", "no"].forEach(opt => {
     const radio = document.createElement("input");
@@ -250,10 +268,9 @@ function renderGradientInputs(q, wrapper) {
     radio.className = "radio-input";
     radio.dataset.id = q.id;
     radio.addEventListener("change", async (event) => {
-        window.handleInputChange(event);
-        await window.electronAPI.saveAnswers(window.allQuestions);
-    
-      });
+      window.handleInputChange(event);
+      await window.electronAPI.saveAnswers(window.allQuestions);
+    });
     wrapper.appendChild(radio);
 
     const span = document.createElement("span");
@@ -292,6 +309,9 @@ function renderGradientInputs(q, wrapper) {
   wrapper.appendChild(lengthInput);
 }
 
+/**
+ * Standard single-line input for text or numbers
+ */
 function renderTextInput(q, wrapper) {
   const input = document.createElement("input");
   input.type = q.type === "number" ? "number" : "text";
@@ -303,50 +323,56 @@ function renderTextInput(q, wrapper) {
   wrapper.appendChild(input);
 }
 
+/**
+ * Image file selector + preview + remove logic
+ */
 function renderImageInput(q, wrapper) {
-    const hasImage = Array.isArray(q.imageList) && q.imageList.length > 0;
-  
-    if (hasImage) {
-      q.imageList.forEach((imgPath, idx) => {
-        const img = document.createElement("img");
-        img.src = imgPath;
-        img.className = "preview-image";
-        wrapper.appendChild(img);
-  
-        const removeBtn = document.createElement("button");
-        removeBtn.textContent = "Remove";
-        removeBtn.className = "remove-image";
-        removeBtn.dataset.id = q.id;
-        removeBtn.dataset.index = idx;
-        removeBtn.addEventListener("click", window.removeImage);
-        wrapper.appendChild(removeBtn);
-      });
-    } else {
-      const input = document.createElement("input");
-      input.type = "file";
-      input.accept = "image/*";
-      input.className = "image-input";
-      input.dataset.id = q.id;
-      input.dataset.imgIndex = 0;
-      input.addEventListener("change", window.handleImageUpload);
-      wrapper.appendChild(input);
-    }
+  const hasImage = Array.isArray(q.imageList) && q.imageList.length > 0;
+
+  if (hasImage) {
+    q.imageList.forEach((imgPath, idx) => {
+      const img = document.createElement("img");
+      img.src = imgPath;
+      img.className = "preview-image";
+      wrapper.appendChild(img);
+
+      const removeBtn = document.createElement("button");
+      removeBtn.textContent = "Remove";
+      removeBtn.className = "remove-image";
+      removeBtn.dataset.id = q.id;
+      removeBtn.dataset.index = idx;
+      removeBtn.addEventListener("click", window.removeImage);
+      wrapper.appendChild(removeBtn);
+    });
+  } else {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.className = "image-input";
+    input.dataset.id = q.id;
+    input.dataset.imgIndex = 0;
+    input.addEventListener("change", window.handleImageUpload);
+    wrapper.appendChild(input);
   }
-  function safeRenderQuestions() {
-    const active = document.activeElement;
-    const activeId = active?.dataset?.id;
-    const activeType = active?.type;
-    const activeValue = active?.value;
-  
-    renderQuestions(); // ⚠ triggers full redraw
-  
-    if (activeId) {
-      let selector = `[data-id="${activeId}"]`;
-      if (activeType === "radio" && activeValue) {
-        selector += `[value="${activeValue}"]`;
-      }
-      const toFocus = document.querySelector(selector);
-      if (toFocus) toFocus.focus();
+}
+
+/**
+ * Re-render questions while preserving input focus
+ */
+function safeRenderQuestions() {
+  const active = document.activeElement;
+  const activeId = active?.dataset?.id;
+  const activeType = active?.type;
+  const activeValue = active?.value;
+
+  renderQuestions();
+
+  if (activeId) {
+    let selector = `[data-id="${activeId}"]`;
+    if (activeType === "radio" && activeValue) {
+      selector += `[value="${activeValue}"]`;
     }
+    const toFocus = document.querySelector(selector);
+    if (toFocus) toFocus.focus();
   }
-  
+}

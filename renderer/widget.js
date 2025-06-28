@@ -1,6 +1,9 @@
 const fs = require("fs");
 const path = require("path");
 
+/**
+ * 🖼 Convert a local image file to base64 for embedding
+ */
 function toBase64Image(filePath) {
   try {
     const resolved = path.resolve(filePath);
@@ -13,6 +16,13 @@ function toBase64Image(filePath) {
   }
 }
 
+/**
+ * 📋 Group questions by their section (`group` field) for widget output
+ * - Skips image-type questions
+ * - Filters out questions with no answer unless they're headings
+ * - Detects and skips duplicate group headings
+ * - Adds subheadings where relevant, only if followed by meaningful data
+ */
 function groupQuestions(questions) {
   const grouped = new Map();
 
@@ -27,7 +37,7 @@ function groupQuestions(questions) {
     const group = grouped.get(heading) || { questions: [] };
 
     if (q.isHeading) {
-      // Look ahead: is there any content before next heading?
+      // 🔍 Look ahead for actual content under this subheading
       let hasDataBelow = false;
       for (let j = i + 1; j < questions.length; j++) {
         const nextQ = questions[j];
@@ -44,22 +54,24 @@ function groupQuestions(questions) {
         label: q.outputLabel || q.question
       });
     } else {
-      // Avoid duplicating group name as a question row
+      // ❌ Skip questions where the label matches the group title (redundant)
       if ((q.outputLabel || q.question)?.trim().toLowerCase() === heading.trim().toLowerCase()) continue;
-
 
       let answer = "";
       let detail = q.responseDetail || "";
 
+      // 🧠 Format simple Y/N answers with capital
       if (["y/n", "y/n/p", "y/n/t"].includes(q.type)) {
         answer = q.response ? q.response.charAt(0).toUpperCase() + q.response.slice(1) : "";
       }
 
+      // 📐 Place numerical/measured inputs into detail field
       if (["measure", "number", "option"].includes(q.type)) {
         detail = q.response || "";
         answer = "";
       }
 
+      // ➗ Handle ramp gradient calculation (Height + Length)
       if (
         q.type === "gradient" &&
         q.response === "yes" &&
@@ -86,6 +98,7 @@ function groupQuestions(questions) {
     grouped.set(heading, group);
   }
 
+  // 🧼 Filter out any groups with only subheadings and no content
   return Array.from(grouped.entries())
     .filter(([, { questions }]) => questions.some(q => !q.subheading || (q.subheading && q.label)))
     .map(([heading, { questions }]) => ({
@@ -94,6 +107,9 @@ function groupQuestions(questions) {
     }));
 }
 
+/**
+ * 🖼 Build image gallery array (base64 + section label)
+ */
 function collectGalleryImages(questions) {
   const gallery = [];
 
@@ -111,6 +127,9 @@ function collectGalleryImages(questions) {
   return gallery;
 }
 
+/**
+ * 🧩 Inject grouped data and image gallery into widget.template.js
+ */
 function injectTemplate(grouped, imageGallery, position) {
   const template = fs.readFileSync(path.join(__dirname, "widget.template.js"), "utf8");
   return `(function() {
@@ -121,6 +140,12 @@ function injectTemplate(grouped, imageGallery, position) {
   })();`;
 }
 
+/**
+ * 🛠 Main function to generate widget.js for embedding
+ * - Reads saved answers
+ * - Groups questions and prepares images
+ * - Injects into template and writes to output path
+ */
 module.exports = async function generateWidget(answersPath, outputPath, position = "bottom-left") {
   const raw = fs.readFileSync(answersPath, "utf8");
   const answers = JSON.parse(raw);

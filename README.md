@@ -133,6 +133,40 @@ These scripts will generate `.dmg` and `.exe` installers using electron-builder 
 
 ---
 
+
+---
+
+## 🔧 Code Structure Overview
+
+This project is divided between Electron’s main and renderer processes, with logic modularized for clarity and testability.
+
+### 📁 Root Files
+- `main.js` – Entry point. Manages app lifecycle, window creation, and IPC channels for PDF and widget generation.
+- `preload.js` – Secure bridge exposing limited APIs from main to renderer (via contextBridge).
+- `index.html` – Basic HTML scaffold loaded into the renderer window.
+
+### 🖼 Renderer Files (`/renderer`)
+- `render.js` – Wires up all buttons (save, PDF, widget) and initializes the UI.
+- `logic/core.js` – Core logic to render questions, apply skip logic, track answers, and validate gradients.
+- `questions.js` – Loads `questions.json` and merges it with saved answers from disk.
+- `pdf.js` – Builds HTML structure and exports a grouped-accessibility PDF with images and answers.
+- `widget.js` – Processes answers and injects them into a JavaScript-based widget using `widget.template.js`.
+- `widget.template.js` – Self-contained popup template that displays questions and image gallery in a page overlay.
+- `logic/image.js` – Handles image selection, base64 conversion, save/remove logic.
+- `logic/validation.js` – Centralized validation logic (currently gradient-specific).
+
+### 📁 Styles
+- `style.css` – Base form layout, image styling, and responsive tweaks.
+
+### 📁 Electron Data Paths
+- All answers saved to:
+  - **macOS:** `~/Library/Application Support/access-bali-hotels/answers.json`
+  - **Windows:** `C:\Users\USERNAME\AppData\Roaming\access-bali-hotels\answers.json`
+- Uploaded images saved in:  
+  `user_images/` subfolder in the same directory.
+
+
+
 ## 📄 License
 
 MIT

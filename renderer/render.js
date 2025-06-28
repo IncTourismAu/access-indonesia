@@ -8,14 +8,14 @@
 import { loadQuestions, renderQuestions, handleInputChange } from "./logic/core.js";
 import { handleImageUpload, removeImage } from "./logic/image.js";
 import { validateGradientQuestions } from "./logic/validation.js";
-// Attach key handlers for global modules to access
+
+// 🌐 Make key functions globally accessible for use in inline HTML or other modules
 window.renderQuestions = renderQuestions;
 window.handleInputChange = handleInputChange;
 window.handleImageUpload = handleImageUpload;
 window.removeImage = removeImage;
 
-
-// Button bindings
+// 💾 SAVE DATA button
 document.getElementById("save-data").addEventListener("click", async () => {
   await window.electronAPI.saveAnswers(window.allQuestions);
   await window.electronAPI.showMessageBox({
@@ -25,7 +25,9 @@ document.getElementById("save-data").addEventListener("click", async () => {
   });
 });
 
+// 🧾 GENERATE PDF button
 document.getElementById("generate-pdf").addEventListener("click", async () => {
+  // Validate ramp gradients before generating PDF
   if (!validateGradientQuestions(window.allQuestions)) {
     await window.electronAPI.showMessageBox({
       type: "warning",
@@ -35,6 +37,7 @@ document.getElementById("generate-pdf").addEventListener("click", async () => {
     return;
   }
 
+  // Generate PDF and notify user of saved file path
   const filePath = await window.electronAPI.generatePdf(window.allQuestions);
   if (filePath) {
     await window.electronAPI.showMessageBox({
@@ -45,7 +48,9 @@ document.getElementById("generate-pdf").addEventListener("click", async () => {
   }
 });
 
+// 📦 GENERATE WIDGET button
 document.getElementById("generate-widget").addEventListener("click", async () => {
+  // Validate gradient logic again
   if (!validateGradientQuestions(window.allQuestions)) {
     await window.electronAPI.showMessageBox({
       type: "warning",
@@ -55,6 +60,7 @@ document.getElementById("generate-widget").addEventListener("click", async () =>
     return;
   }
 
+  // Ask user where the widget button should appear
   const choice = await window.electronAPI.showMessageBox({
     type: "question",
     buttons: ["Bottom Left", "Bottom Center", "Bottom Right", "I will insert my own button manually"],
@@ -64,9 +70,11 @@ document.getElementById("generate-widget").addEventListener("click", async () =>
     message: "Where should the widget button appear?",
   });
 
+  // Map button selection to internal widget position setting
   const positions = ["bottom-left", "bottom-center", "bottom-right", "manual"];
   const position = positions[choice.response];
 
+  // Generate widget and confirm saved location
   const filePath = await window.electronAPI.generateWidget(position);
   if (filePath) {
     await window.electronAPI.showMessageBox({
@@ -76,6 +84,8 @@ document.getElementById("generate-widget").addEventListener("click", async () =>
     });
   }
 });
+
+// 🧹 CLEAR DATA button
 document.getElementById("clear-data").addEventListener("click", async () => {
   const confirmed = await window.electronAPI.showMessageBox({
     type: "warning",
@@ -86,16 +96,17 @@ document.getElementById("clear-data").addEventListener("click", async () => {
     message: "Are you sure you want to delete all answers and uploaded images?",
   });
 
+  // If user confirms, clear local data and reload form fresh
   if (confirmed.response === 1) {
     await window.electronAPI.clearAppData();
-    await loadQuestions(); // ⬅ reload fresh state
+    await loadQuestions(); // ⬅ Reloads initial questions without answers
   }
 });
 
-// Global access for use in other modules
+// 🧠 Redundant: ensures global access (can be removed if already set above)
 window.handleInputChange = handleInputChange;
 window.handleImageUpload = handleImageUpload;
 window.removeImage = removeImage;
 
-// Initial load of questions
+// 🚀 Initial load of questions into the form
 loadQuestions();

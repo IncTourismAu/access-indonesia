@@ -3,6 +3,11 @@ const path = require("path");
 const os = require("os");
 const { BrowserWindow } = require("electron");
 
+/**
+ * 🖼️ Collect and convert images to base64 (for embedding into PDF)
+ * - Reads up to 24 images only
+ * - Each image is linked to its section label
+ */
 function collectAllImages(questions) {
   const images = [];
   let imageCount = 0;
@@ -31,7 +36,10 @@ function collectAllImages(questions) {
   return images;
 }
 
-
+/**
+ * 🔍 Utility: check if any content follows a heading block
+ * Used to suppress empty section headings in the PDF
+ */
 function hasContentAfter(index, questions) {
   for (let i = index + 1; i < questions.length; i++) {
     const q = questions[i];
@@ -41,6 +49,12 @@ function hasContentAfter(index, questions) {
   return false;
 }
 
+/**
+ * 📋 Build the HTML table of answers (Question / Answer / Detail)
+ * - Skips image questions
+ * - Includes only answered questions or gradient values
+ * - Applies skip logic for unused headings
+ */
 function buildAnswerTable(questions) {
   const rows = [];
   let lastGroup = "";
@@ -52,11 +66,14 @@ function buildAnswerTable(questions) {
 
   for (let i = 0; i < filtered.length; i++) {
     const q = filtered[i];
+
     if (q.isHeading) {
       if (!hasContentAfter(i, filtered)) continue;
-      const heading = (q.outputLabel || q.question || q.group || "Section").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      const heading = (q.outputLabel || q.question || q.group || "Section")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
       rows.push(`<tr><th colspan="3" style="background:#eef; text-align:left;font-weight: bold;">${heading}</th></tr>`);
-      continue; // skip normal row rendering
+      continue;
     }
 
     const label = (q.outputLabel || q.question).replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -71,20 +88,19 @@ function buildAnswerTable(questions) {
       answer = q.response || "";
     }
 
-   if (q.type === "gradient") {
-  if (q.response === "yes") answer = "Yes";
-
-  if (
-    q.height &&
-    q.length &&
-    !isNaN(parseFloat(q.height)) &&
-    !isNaN(parseFloat(q.length))
-  ) {
-    const ratio = Math.round(parseFloat(q.length) / parseFloat(q.height));
-    detail = `1 : ${ratio}`;
-  }
-}
-
+    // ➗ Handle gradient formatting
+    if (q.type === "gradient") {
+      if (q.response === "yes") answer = "Yes";
+      if (
+        q.height &&
+        q.length &&
+        !isNaN(parseFloat(q.height)) &&
+        !isNaN(parseFloat(q.length))
+      ) {
+        const ratio = Math.round(parseFloat(q.length) / parseFloat(q.height));
+        detail = `1 : ${ratio}`;
+      }
+    }
 
     rows.push(`
       <tr>
@@ -94,6 +110,7 @@ function buildAnswerTable(questions) {
       </tr>`);
   }
 
+  // Return full HTML table
   return `
     <table border="1" cellspacing="0" cellpadding="5" style="width: 100%; font-size: 10pt;">
       <thead>
@@ -108,7 +125,11 @@ function buildAnswerTable(questions) {
   `;
 }
 
-
+/**
+ * 🖼 Generate a paginated image gallery
+ * - 2 images per row
+ * - Page break every 3 rows (i.e., 6 images)
+ */
 function buildPaginatedImageGallery(images) {
   let galleryHtml = "";
   let rowCount = 0;
@@ -139,6 +160,12 @@ function buildPaginatedImageGallery(images) {
   return galleryHtml;
 }
 
+/**
+ * 🧾 Generate the final PDF from question data and save to disk
+ * - Creates temporary HTML
+ * - Loads in a hidden Electron window
+ * - Exports to PDF using `printToPDF`
+ */
 async function generatePdf(questions, outputPath) {
   const images = collectAllImages(questions);
   const imageGalleryHtml = buildPaginatedImageGallery(images);
