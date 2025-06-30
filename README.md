@@ -100,7 +100,7 @@ npm start
 - Electron IPC bridges main <-> renderer
 - PDF is generated in memory using base64 image data
 - Gradient questions must include height/length when "yes" is selected
-- Image uploads are restricted to ~130KB for performance on lower-end machines
+- Image uploads are restricted to ~130KB for performance 
 - Widget and PDF respect grouped question layout and output labels
 - The app builds a JavaScript widget that can be embedded in a webpage by your developer
 
