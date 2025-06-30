@@ -8,7 +8,10 @@ This Electron app is designed to assist in collecting accessibility data from ho
 
 - [Download for macOS (.dmg)](https://github.com/IncTourismAu/access-indonesia/releases/download/v1.0.0/Access.Bali.Hotels-1.0.0.dmg)
 - [Download for Windows (.exe)](https://github.com/IncTourismAu/access-indonesia/releases/download/v1.0.0/Access.Bali.Hotels.Setup.1.0.0.exe)
-- [Download Assessment Checklist PDF](https://github.com/IncTourismAu/access-indonesia/blob/main/Assessment%20Checklist%20EN.pdf)
+- [Download How to Guide ENG PDF](https://github.com/IncTourismAu/access-indonesia/blob/main/How%20to%20Guide-EN.pdf)
+- [Download How to Guide INDO PDF](https://github.com/IncTourismAu/access-indonesia/blob/main/How%20to%20Guide-INDO.pdf)
+- [Download Assessment Checklist ENG PDF](https://github.com/IncTourismAu/access-indonesia/blob/main/Assessment%20Checklist%20EN.pdf)
+- [Download Assessment Checklist INDO PDF](https://github.com/IncTourismAu/access-indonesia/blob/main/Assessment%20Checklist%20INDO.pdf)
 
 ---
 
